@@ -5,7 +5,9 @@
   "main": "app.ts",
   "scripts": {
     "start": "node app.ts",
-    "local": "nodemon --exec npx ts-node app.ts"
+    "local": "nodemon --exec npx ts-node app.ts",
+    "db:seed": "npx ts-node seed/index.ts",
+    "db:reset": "npx prisma migrate reset"
   },
   "keywords": [],
   "author": "",
