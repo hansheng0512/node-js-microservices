@@ -13,7 +13,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-app.get('/login', async (req: Request, res: { json: { (value: { accessToken: string; refreshToken: string; }): void; } }, next: NextFunction)=> {
+app.get('/login', async (req: Request, res: Response, next: NextFunction)=> {
 	// Assuming done all the login checks
 
 	// Read file
