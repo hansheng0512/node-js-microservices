@@ -1,3 +1,5 @@
+import {NextFunction, Request} from "express";
+
 const express = require('express');
 const createError = require('http-errors');
 const morgan = require('morgan');
@@ -11,33 +13,48 @@ app.use(express.urlencoded({extended: false}));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-app.get('/login', async (req, res, next) => {
+app.get('/login', async (req: Request, res: { json: { (value: { accessToken: string; refreshToken: string; }): void; } }, next: NextFunction)=> {
 	// Assuming done all the login checks
 
 	// Read file
 	const secret = fs.readFileSync('./certs/private.pem');
 
-	// Generate a token
-	JWT.sign({}, secret, {
+	// Generate access token
+	const accessToken = JWT.sign({}, secret, {
 		expiresIn: '10min',
 		algorithm: 'RS256'
-	}, (err, token) => {
+	}, (err: string, token: string) => {
 		if (err) {
 			return next(createError(500, err));
 		}
-		return res.send({
-			token
-		});
+		return token
 	});
+
+	// Generate refresh token
+	const refreshToken = JWT.sign({}, secret, {
+		expiresIn: '2h',
+		algorithm: 'RS256'
+	}, (err: string, token: string) => {
+		if (err) {
+			return next(createError(500, err));
+		}
+		return token
+	});
+
+	res.json({
+		accessToken,
+		refreshToken
+	});
+
 });
 
 app.use('/api', require('./routes/api.route'));
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
 	next(createError.NotFound());
 });
 
-app.use((err, req, res, next) => {
+app.use((err: { status: number; message: string; }, req: Request, res: { status: (status: number) => void; send: (value: { status: number; message: string; }) => void; }, next: NextFunction) => {
 	res.status(err.status || 500);
 	res.send({
 		status: err.status || 500,
