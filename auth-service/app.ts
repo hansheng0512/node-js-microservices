@@ -52,7 +52,7 @@ app.get('/login', async (req: Request, res: Response, next: NextFunction)=> {
 
 });
 
-app.use('/api/users', require('./routes/v1/users.route'));
+app.use('/api/v1/users', require('./routes/api/v1/users.route'));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
 	next(createError.NotFound());
