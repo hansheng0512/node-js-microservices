@@ -13,6 +13,10 @@ app.use(express.urlencoded({extended: false}));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+	res.send({message: 'this is auth api server'});
+});
+
 app.get('/login', async (req: Request, res: Response, next: NextFunction)=> {
 	// Assuming done all the login checks
 
