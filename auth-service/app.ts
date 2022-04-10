@@ -1,4 +1,4 @@
-import {NextFunction, Request} from "express";
+import {NextFunction, Request, Response} from "express";
 
 const express = require('express');
 const createError = require('http-errors');
@@ -54,7 +54,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 	next(createError.NotFound());
 });
 
-app.use((err: { status: number; message: string; }, req: Request, res: { status: (status: number) => void; send: (value: { status: number; message: string; }) => void; }, next: NextFunction) => {
+app.use((err: { status: number; message: string; }, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.status || 500);
 	res.send({
 		status: err.status || 500,

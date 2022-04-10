@@ -1,3 +1,5 @@
+import {NextFunction, Request, Response} from "express";
+
 const express = require('express');
 const createError = require('http-errors');
 const morgan = require('morgan');
@@ -20,21 +22,21 @@ app.use(expressJWT({
 	algorithms: ['RS256'],
 }).unless({path: ['/']}));
 
-app.get('/', async (req, res, next) => {
+app.get('/', async (req: Request, res: Response, next: NextFunction) => {
 	res.send({message: 'this is resource api server'});
 });
 
-app.get('/protected', async (req, res, next) => {
+app.get('/protected', async (req: Request, res: Response, next: NextFunction) => {
 	res.send({message: 'this is protected resource api server'});
 });
 
 app.use('/api', require('./routes/api.route'));
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
 	next(createError.NotFound());
 });
 
-app.use((err, req, res, next) => {
+app.use((err: { status: number; message: string; }, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.status || 500);
 	res.send({
 		status: err.status || 500,
