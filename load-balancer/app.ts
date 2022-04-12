@@ -8,7 +8,6 @@ const axios = require('axios');
 // Application servers
 const servers = [
 	"http://localhost:3000",
-	"http://localhost:4000"
 ]
 
 // Track the current application server to send request
